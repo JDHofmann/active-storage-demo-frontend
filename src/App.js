@@ -2,13 +2,12 @@ import './App.css';
 import React from 'react'
 // import {  Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux'
-import {fetchUsers} from './redux/actions'
+import {fetchUsers, fetchCurrentUser, addNewUser } from './redux/actions'
+import { UserCard } from './UserCard';
 
 class App extends React.Component {
 
   state = {
-    // users: [],
-    // currentUser: "",
     avatar: null,
     name: "",
     avatarUrl: null
@@ -16,18 +15,15 @@ class App extends React.Component {
 
   componentDidMount(){
     this.props.fetchUsers()
-    // fetch("http://localhost:3000/users/10")
-    // .then(resp => resp.json())
-    // .then(data => this.setState({currentUser: data}))
   }
 
   renderUsers = () => {
     return this.props.users.map(user => 
-      <div 
-        // contentEditable="true" 
-        key={user.name}>
-        <h2>{user.name}</h2>
-      </div>
+    <UserCard 
+      user={user}
+      key={user.id}
+      fetchCurrentUser={this.props.fetchCurrentUser}
+    />
     )
   }
 
@@ -57,14 +53,7 @@ class App extends React.Component {
     if(this.state.avatar){
       formData.append('user[avatar]', this.state.avatar)
     }
-
-    let options = {
-      method: "POST",
-      body: formData
-    }
-    fetch("http://localhost:3000/users", options)
-    .then(resp => resp.json())
-    .then(data => this.setState( prevState => ({...prevState, data})))
+    this.props.addNewUser(formData)
     this.setState({
       avatar: null,
       name: "",
@@ -101,10 +90,10 @@ class App extends React.Component {
             </button>
           </form>
           { preview }
-          { this.state.currentUser ?
+          { this.props.currentUser ?
           <>
-          <h2>{this.state.currentUser.user.name}</h2>
-          <img src={`http://localhost:3000/${this.state.currentUser.avatar}`}></img></>
+          <h2>{this.props.currentUser.user.name}</h2>
+          <img src={`http://localhost:3000/${this.props.currentUser.avatar}`}></img></>
         : 
         "nothing yet" }
           
@@ -116,8 +105,17 @@ class App extends React.Component {
 
 const msp = state => {
   return {
-    users: state.users
+    users: state.users,
+    currentUser: state.currentUser
   }
 }
 
-export default connect(msp, {fetchUsers})(App);
+const mdp = dispatch => {
+  return {
+    fetchUsers: () => dispatch(fetchUsers()),
+    fetchCurrentUser: (id) => dispatch(fetchCurrentUser(id)),
+    addNewUser: (newUserFormData) => dispatch(addNewUser(newUserFormData))
+  }
+}
+
+export default connect(msp, mdp)(App);

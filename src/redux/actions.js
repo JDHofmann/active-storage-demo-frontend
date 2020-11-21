@@ -12,6 +12,32 @@ export const fetchUsers = () => {
 }
 
 // do I need this?
+export const fetchCurrentUser = (id) => {
+    return (dispatch) => {
+        // dispatch({type: 'SET_CURRENT_USER'})
+        fetch(`http://localhost:3000/users/${id}`)
+        .then(resp => resp.json())
+        .then(data => dispatch({
+            type: 'SET_CURRENT_USER',
+            currentUser: data
+        }))
+    }
+}
+
+export const addNewUser = (newUserFormData) => {
+    return (dispatch) => {
+        let options = {
+            method: "POST",
+            body: newUserFormData
+        }
+        fetch("http://localhost:3000/users", options)
+        .then(resp => resp.json())
+        .then(data => dispatch({
+            type: 'ADD_NEW_USER',
+            newUser: data
+        }))
+    }
+}
 
 export const addUsers = () => {
     return {
