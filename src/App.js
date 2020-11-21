@@ -1,29 +1,31 @@
 import './App.css';
 import React from 'react'
-import {  Route, Switch } from 'react-router-dom';
+// import {  Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux'
+import {fetchUsers} from './redux/actions'
 
 class App extends React.Component {
 
   state = {
-    users: [],
-    currentUser: "",
+    // users: [],
+    // currentUser: "",
     avatar: null,
     name: "",
     avatarUrl: null
   }
 
   componentDidMount(){
-    fetch("http://localhost:3000/users")
-    .then(resp => resp.json())
-    .then(data => this.setState({users: data}))
-    fetch("http://localhost:3000/users/10")
-    .then(resp => resp.json())
-    .then(data => this.setState({currentUser: data}))
+    this.props.fetchUsers()
+    // fetch("http://localhost:3000/users/10")
+    // .then(resp => resp.json())
+    // .then(data => this.setState({currentUser: data}))
   }
 
   renderUsers = () => {
-    return this.state.users.map(user => 
-      <div contenteditable="true" key={user.name}>
+    return this.props.users.map(user => 
+      <div 
+        // contentEditable="true" 
+        key={user.name}>
         <h2>{user.name}</h2>
       </div>
     )
@@ -112,4 +114,10 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const msp = state => {
+  return {
+    users: state.users
+  }
+}
+
+export default connect(msp, {fetchUsers})(App);
