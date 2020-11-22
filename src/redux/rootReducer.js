@@ -15,6 +15,15 @@ const usersReducer = (
             return action.users
         case 'ADD_NEW_USER':
             return [...state, action.newUser]
+        case 'REMOVE_USER':
+            console.log(action.removedUser)
+            let remainingUsers = state.filter(u => u.id !== action.removedUser.id)
+            return remainingUsers
+
+        case 'UPDATE_USER':
+            let stillUsers = state.filter(u => u.id !== action.user.id)
+            return [...stillUsers, action.user]
+            
         default :
             return state
     }

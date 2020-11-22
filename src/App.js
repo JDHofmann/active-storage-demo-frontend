@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react'
 // import {  Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux'
-import {fetchUsers, fetchCurrentUser, addNewUser } from './redux/actions'
+import {fetchUsers, fetchCurrentUser, addNewUser, deleteUser, editUser } from './redux/actions'
 import { UserCard } from './UserCard';
 
 class App extends React.Component {
@@ -23,6 +23,8 @@ class App extends React.Component {
       user={user}
       key={user.id}
       fetchCurrentUser={this.props.fetchCurrentUser}
+      deleteUser={this.props.deleteUser}
+      editUser={this.props.editUser}
     />
     )
   }
@@ -114,7 +116,9 @@ const mdp = dispatch => {
   return {
     fetchUsers: () => dispatch(fetchUsers()),
     fetchCurrentUser: (id) => dispatch(fetchCurrentUser(id)),
-    addNewUser: (newUserFormData) => dispatch(addNewUser(newUserFormData))
+    deleteUser: (id) => dispatch(deleteUser(id)),
+    addNewUser: (newUserFormData) => dispatch(addNewUser(newUserFormData)),
+    editUser: (updatedUser) => dispatch(editUser(updatedUser))
   }
 }
 
