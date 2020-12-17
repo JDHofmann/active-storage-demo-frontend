@@ -14,7 +14,7 @@ export const fetchUsers = () => {
 // do I need this?
 export const fetchCurrentUser = (id) => {
     return (dispatch) => {
-        // dispatch({type: 'SET_CURRENT_USER'})
+        console.log(id)
         fetch(`http://localhost:3000/users/${id}`)
         .then(resp => resp.json())
         .then(data => dispatch({

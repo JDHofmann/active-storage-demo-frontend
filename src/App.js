@@ -10,7 +10,8 @@ class App extends React.Component {
   state = {
     avatar: null,
     name: "",
-    avatarUrl: null
+    avatarUrl: null,
+    password: ""
   }
 
   componentDidMount(){
@@ -30,13 +31,12 @@ class App extends React.Component {
   }
 
   handleChange = (e) => {
-    this.setState({ name: e.target.value})
+    this.setState({ [e.target.name]: e.target.value})
   }
 
   handleFileChange = (e) => {
     const uploadingFile = e.target.files[0]
     const fileReader = new FileReader();
-    // fileReader has event 
     fileReader.onloadend = () => {
       this.setState({
         avatar: uploadingFile,
@@ -52,6 +52,7 @@ class App extends React.Component {
     e.preventDefault()
     const formData = new FormData();
     formData.append('user[name]', this.state.name)
+    formData.append('user[password]', this.state.password)
     if(this.state.avatar){
       formData.append('user[avatar]', this.state.avatar)
     }
@@ -59,7 +60,8 @@ class App extends React.Component {
     this.setState({
       avatar: null,
       name: "",
-      avatarUrl: null
+      avatarUrl: null,
+      password: ""
     })
   }
 
@@ -78,9 +80,16 @@ class App extends React.Component {
               type="text"
               name="name"
               value={this.state.name}
+              placeholder="name"
               onChange={this.handleChange}
               >
             </input>
+            <input 
+              type="text"
+              name="password"
+              placeholder="password"
+              onChange={this.handleChange}
+            ></input>
             <input 
               type="file"
               name="avatar"
